@@ -255,7 +255,7 @@ class TripController {
         },
       });
 
-      // 8️⃣ If all verified → complete trip
+
       let updatedTrip = null;
       if (pendingOtps === 0) {
         updatedTrip = await prisma.trip.update({
@@ -264,6 +264,31 @@ class TripController {
             Status: "COMPLETED",
           },
         });
+      }
+
+      if (pendingOtps === 0) {
+        const trip = await prisma.trip.findUnique({
+          where: { id: Number(tripId) },
+          include: {
+            tripShipments: {
+              include: {
+                shipment: {
+                  include: {
+                    business: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+
+        const completeddestination = "91" + trip.tripShipments[0].shipment.business.phoneNumber;
+
+        await MyOperatorService.sendWhatsAppTripCompleted(
+          completeddestination,
+          tripId
+        );
       }
 
       return res.status(200).json({
