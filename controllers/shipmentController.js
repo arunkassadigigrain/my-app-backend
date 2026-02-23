@@ -283,6 +283,7 @@ class ShipmentController {
     const { startDateUTC, endDateUTC } = TimeRange.getDateRange(range);
     const shipments = await prisma.shipment.findMany({
       where: {
+        tenantId: req.user.id,
         updatedAt: {
           gte: startDateUTC,
           lte: endDateUTC,
