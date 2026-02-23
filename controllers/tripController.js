@@ -373,7 +373,7 @@ class TripController {
     try {
       const { id } = req.params;
       const trip = await prisma.trip.findUnique({
-        where: { id: Number(id), tenantId: req.user.id, },
+        where: { id: Number(id)},
         include: {
           driver: true,
           truck: true,
