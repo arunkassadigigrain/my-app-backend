@@ -161,6 +161,7 @@ class TripController {
               shipment: {
                 include: {
                   business: true,
+                  shipmentOtps:true,
                   shippingAddress: true,
                   shipmentItems: {
                     include: {
